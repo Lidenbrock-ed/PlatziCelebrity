@@ -9,6 +9,7 @@ const db = require('./store/database');
 
 //controllers
 const registerRoute = require('./routes/register');
+const loginRoute = require('./routes/login')
 app.use(function(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -24,6 +25,7 @@ app.get('*', (req, res) => {
 });*/
 //Routes
 //app.use('/api/scrapper', scrapperController);
-app.use('/users', registerRoute);
+app.use('/api/register', registerRoute);
+app.use('/api/login', loginRoute);
 
 module.exports= app;
