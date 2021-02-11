@@ -6,10 +6,13 @@ const path = require('path');
 
 //database
 const db = require('./store/database');
+db.sync({alter:false});
 
 //controllers
 const registerRoute = require('./routes/register');
-const loginRoute = require('./routes/login')
+const loginRoute = require('./routes/login');
+const homeRoute = require('./routes/home');
+const profileRoute = require('./routes/profile');
 app.use(function(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -27,5 +30,7 @@ app.get('*', (req, res) => {
 //app.use('/api/scrapper', scrapperController);
 app.use('/api/register', registerRoute);
 app.use('/api/login', loginRoute);
+app.use('/api/home', homeRoute);
+app.use('/api/profile',profileRoute);
 
 module.exports= app;
