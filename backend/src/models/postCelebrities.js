@@ -1,17 +1,18 @@
-const {Sequelize,DataTypes,Model}= require('sequelize'); 
-
-class post_celebrities extends Model {}
-post_celebrities.init({
+const {DataTypes}= require('sequelize'); 
+const sequelize = require('../store/database');
+let postCelebrities = sequelize.define('post_celebrities', { 
     id: {
         type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true, allowNull:false
     },
     post_id:{
-        type:DataTypes.INTEGER, allowNull:false
+        type:DataTypes.INTEGER, allowNull:false, unique:false
     },
     celebrity_id:{
-        type:DataTypes.INTEGER, allowNull:false
+        type:DataTypes.INTEGER, allowNull:false, unique:false
     }
 },  {
         freezeTableName: true, timestamps:false
-})
-module.exports=post_celebrities;
+});
+module.exports={
+    postCelebrities
+};

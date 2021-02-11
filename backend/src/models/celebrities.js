@@ -1,7 +1,8 @@
-const {Sequelize,DataTypes,Model}= require('sequelize'); 
-
-class celebrities extends Model {}
-celebrities.init({
+const {DataTypes}= require('sequelize'); 
+const sequelize = require('../store/database');
+const {category} = require('./categories');
+const {celebrityCategories} = require('./celebrityCategories');
+let celebrity = sequelize.define('celebrities', { 
     id: {
         type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true, allowNull:false
     },
@@ -10,5 +11,26 @@ celebrities.init({
     }
 },  {
         freezeTableName: true,timestamps:false
-})
-module.exports=celebrities;
+});
+let celebrityCategoriesAssociation = function (){
+    celebrity.belongsToMany(category,{
+        foreignKey:"celebrity_id",
+        through:{
+            model:celebrityCategories
+        },
+        timestamps:false,
+        uniqueKey:false
+    });
+    category.belongsToMany(celebrity,{
+        foreignKey:'category_id',
+        through:{
+            model:celebrityCategories
+        },
+        timestamps:false,
+        uniqueKey:false
+    });
+};
+celebrityCategoriesAssociation();
+module.exports={
+    celebrity
+};

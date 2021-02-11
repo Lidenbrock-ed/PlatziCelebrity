@@ -1,7 +1,6 @@
-const {Sequelize,DataTypes,Model}= require('sequelize'); 
-
-class users_level extends Model {}
-users_level.init({
+const {DataTypes}= require('sequelize'); 
+const sequelize = require('../store/database');
+let userLevel = sequelize.define('user_level', { 
     id: {
         type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true, allowNull:false
     },
@@ -9,9 +8,11 @@ users_level.init({
         type:DataTypes.CHAR, allowNull:false
     },
     priority:{
-        type:DataTypes.INTEGER, allowNull:false
+        type:DataTypes.INTEGER, allowNull:false, unique:true
     }
 },  {
         freezeTableName: true, timestamps:false
-})
-module.exports=users_level;
+});
+module.exports={
+    userLevel
+};

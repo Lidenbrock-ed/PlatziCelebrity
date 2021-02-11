@@ -1,7 +1,6 @@
-const {Sequelize,DataTypes,Model}= require('sequelize'); 
-
-class users_categories extends Model {}
-users_categories.init({
+const {DataTypes}= require('sequelize'); 
+const sequelize = require('../store/database');
+let userCategories= sequelize.define('user_categories', { 
     id: {
         type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true, allowNull:false
     },
@@ -9,9 +8,11 @@ users_categories.init({
         type:DataTypes.INTEGER, allowNull:false
     },
     category_id:{
-        type:DataTypes.INTEGER, allowNull:false
+        type:DataTypes.ARRAY(DataTypes.INTEGER), allowNull:false
     }
 },  {
         freezeTableName: true, timestamps:false
-})
-module.exports=users_categories;
+});
+module.exports={
+    userCategories
+};
