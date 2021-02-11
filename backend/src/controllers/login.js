@@ -1,9 +1,9 @@
 const {user} = require('../models/users');
 const bcrypt = require('bcrypt');
-async function loginUser (req, res){
+async function loginUser (req){
     try{
     let data = req.body;
-    if(!data.email|!data.password){
+    if(!data.email||!data.password){
         throw new Error;
     }
     let password= await user.findOne({
@@ -16,7 +16,6 @@ async function loginUser (req, res){
     switch(allowSession){
         case false:
             throw new Error;
-            break;
         case true:
             let id = await user.findOne({
                 attributes:['id'],
@@ -25,18 +24,17 @@ async function loginUser (req, res){
                 }
             });
             id = id.toJSON().id;
-            res.json({
+            return {
+                status: 200,
                 id: id,
-                status:200,
                 message:"successfully"
-            });
-            break;
+            };
     }
     }catch(error){
-        res.json({
+        return {
             status:204,
             message:"Email or Password wrong, please try again"
-        });
+        };
     }
 }
 module.exports= loginUser;

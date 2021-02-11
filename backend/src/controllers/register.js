@@ -1,10 +1,10 @@
 const bcrypt = require('bcrypt');
 const {user}= require('../models/users');
-
-async function registerUser(req,res){
+const {userCategories} = require('../models/usersCategories');
+async function registerUser(req){
     try{
         let body = req.body;
-        if(!body.first_name | !body.last_name|!body.password|!body.email){
+        if(!body.first_name || !body.last_name||!body.password||!body.email){
             throw new Error
         }
         let emailregistered = true;
@@ -25,18 +25,28 @@ async function registerUser(req,res){
                     password_:passwordHash,
                     level_id:5
                     });
-                res.json({
+                let id = await user.findOne({
+                    attributes:['id'],
+                    where:{
+                        email:body.email
+                    }
+                })
+                    userCategories.create({
+                        user_id:id.toJSON().id,
+                        category_id:[1,2,3,4]
+                    });    
+                return {
                     status:201,
                     message:"Registered User"
-                })
+                };
                 break;
             default: throw new Error;
         }
     }catch(error){
-        res.json({
+        return {
             status:204,
             message:"Unexpected Error"
-        });
+        };
     }
 }
 module.exports= registerUser;
