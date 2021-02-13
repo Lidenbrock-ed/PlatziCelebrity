@@ -6,7 +6,6 @@ const path = require('path');
 
 //database
 const db = require('./store/database');
-db.sync({alter:false});
 
 //controllers
 const registerRoute = require('./routes/register');

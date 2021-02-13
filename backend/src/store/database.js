@@ -18,4 +18,5 @@ async function connect(){
     }
 };
 connect()
+sequelize.sync({alter:false});
 module.exports = sequelize;
