@@ -7,6 +7,13 @@ async function registerUser(req){
         if(!body.first_name || !body.last_name||!body.password||!body.email){
             throw new Error
         }
+        let checkEmail =/[a-zA-Z0-9_\.]+[_\.]*@[a-z]*\.[a-z]{2,5}/.test(body.email);
+        if(checkEmail == false){
+            return {
+                status:400,
+                message:"it isn't a valid email please try again"
+            }
+        }
         let emailregistered = true;
         let email= await user.findOne({
             attributes:['email'],
