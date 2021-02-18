@@ -1,18 +1,26 @@
+//const jwt = require('jsonwebtoken');
 const {user} = require('../models/users');
 const bcrypt = require('bcrypt');
+let {SECRET} = process.env;
 async function loginUser (req){
     try{
     let data = req.body;
-    if(!data.email||!data.password){
+    if(!data.email|| !data.password){
         throw new Error;
     }
-    let password= await user.findOne({
-        attributes:['password_'],
+    let allowLogin= await user.findOne({
+        attributes:['password_', 'actived'],
             where:{
                 email:data.email
             }
     })
-    let allowSession = bcrypt.compareSync(data.password, password.toJSON().password_);
+    if(allowLogin.toJSON().actived == false){
+        return {
+            status:400,
+            message: 'Please confirm your email to login People news'
+        }
+    }
+    let allowSession = bcrypt.compareSync(data.password, allowLogin.toJSON().password_);
     switch(allowSession){
         case false:
             throw new Error;
@@ -37,4 +45,4 @@ async function loginUser (req){
         };
     }
 }
-module.exports= loginUser;
+module.exports= {loginUser};
