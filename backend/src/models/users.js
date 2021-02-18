@@ -22,7 +22,7 @@ let user = sequelize.define('users', {
     password_:{
         type:DataTypes.STRING, allowNull:false
     },
-    actived:{
+    active:{
         type:DataTypes.BOOLEAN, allowNull:false, defaultValue: false
     },
 },  {
