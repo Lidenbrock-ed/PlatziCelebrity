@@ -9,12 +9,12 @@ async function loginUser (req){
         throw new Error;
     }
     let allowLogin= await user.findOne({
-        attributes:['password_', 'actived'],
+        attributes:['password_', 'active'],
             where:{
                 email:data.email
             }
     })
-    if(allowLogin.toJSON().actived == false){
+    if(allowLogin.toJSON().active == false){
         return {
             status:400,
             message: 'Please confirm your email to login People news'
