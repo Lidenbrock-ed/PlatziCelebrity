@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const {user}= require('../models/users');
 const {userCategories} = require('../models/usersCategories');
+const validatorEmail= require('../auth/authEmail');
 async function registerUser(req){
     try{
         let body = req.body;
@@ -41,10 +42,11 @@ async function registerUser(req){
                     userCategories.create({
                         user_id:id.toJSON().id,
                         category_id:[1,2,3,4]
-                    });    
+                    });
+                validatorEmail({name:body.first_name, email:body.email});    
                 return {
                     status:201,
-                    message:"Registered User"
+                    message:"Registered user, please confirm you email."
                 };
                 break;
             default: throw new Error;
