@@ -22,6 +22,9 @@ let user = sequelize.define('users', {
     password_:{
         type:DataTypes.STRING, allowNull:false
     },
+    actived:{
+        type:DataTypes.BOOLEAN, allowNull:false, defaultValue: false
+    },
 },  {
         freezeTableName: false, timestamps:false
 });
