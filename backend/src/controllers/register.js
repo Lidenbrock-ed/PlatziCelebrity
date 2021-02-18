@@ -1,7 +1,10 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const {user}= require('../models/users');
 const {userCategories} = require('../models/usersCategories');
 const validatorEmail= require('../auth/authEmail');
+const { userPost } = require('../models/userPost');
+const {SECRET} = process.env;
 async function registerUser(req){
     try{
         let body = req.body;
@@ -43,7 +46,8 @@ async function registerUser(req){
                         user_id:id.toJSON().id,
                         category_id:[1,2,3,4]
                     });
-                validatorEmail({name:body.first_name, email:body.email});    
+                let token = generateToken(id.toJSON().id);
+                validatorEmail({name:body.first_name, email:body.email, token:token});   
                 return {
                     status:201,
                     message:"Registered user, please confirm you email."
@@ -58,4 +62,29 @@ async function registerUser(req){
         };
     }
 }
-module.exports= registerUser;
+function generateToken(idUser){
+    return jwt.sign({id:idUser, active:true}, SECRET);
+}
+async function activateAccount(token){
+    try{
+        let verify = jwt.verify(token, SECRET);
+        user.update({active:'true'},{
+            where:{
+                id:verify.id
+            }
+        });
+        return{
+            status:200,
+            message:"Activated account, please go to login"
+        }
+    }catch(error){
+        return{
+            status:204,
+            message:"Unexpected Error"
+        }
+    }
+}
+module.exports= {
+    registerUser,
+    activateAccount
+};

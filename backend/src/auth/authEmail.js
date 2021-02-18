@@ -1,4 +1,4 @@
-async function validatorEmail(req){
+function validatorEmail(req){
     const nodemailer = require('nodemailer');
     const {EMAIL, PASSWORD_EMAIL} = process.env;
     let transporter = nodemailer.createTransport({
@@ -20,7 +20,7 @@ async function validatorEmail(req){
                 <div>
                     <h3>Bienvenido a People News ${req.name}. <br> ¡Estás muy proximo a terminar tu registro!</h3>
                     <p> Para confirmar tu correo debes dar clic en el siguiente botón.</p>  
-                    <a href="http://localhost:3000/api/login/test">
+                    <a href="http://localhost:3000/api/register/${req.token}">
                         <button>Confirmar mi email</button>
                     </a>
                 </div>
@@ -38,5 +38,5 @@ async function validatorEmail(req){
             console.log('Send email to confirmation');
         }    
     });
-} 
+}
 module.exports = validatorEmail;
