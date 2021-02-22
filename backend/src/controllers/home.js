@@ -1,5 +1,4 @@
 const {userCategories} = require('../models/usersCategories');
-const {postCategories} = require('../models/postCategories');
 const {category} = require('../models/categories');
 const {post} = require('../models/posts');
 const {userPost} = require('../models/userPost');
@@ -10,60 +9,30 @@ async function getPost(req){
         if(!req.body.id){
             throw new Error
         }
-        let id = req.body.id;
         let idCategory = await userCategories.findOne({
             attributes: ['category_id'],
             where:{
-                user_id:id
+                user_id:req.body.id
             }
         });
-        let {category_id}= idCategory.toJSON();
-        let postId;
-        switch (category_id.length) {
-            case 1:
-                postId = await postCategories.findAll({
-                    attributes:['post_id'],
-                    where:{  
-                        category_id:[1], 
-                    }
-                });
-                break;
-            case 2:
-                postId = await postCategories.findAll({
-                    attributes:['post_id'],
-                    where:{  
-                        category_id:[1,2], 
-                    }
-                });
-                break;
-            case 3:
-                postId = await postCategories.findAll({
-                    attributes:['post_id'],
-                    where:{  
-                        category_id:[1,2,3], 
-                    }
-                });
-                break;
-            case 4:
-                postId = await postCategories.findAll({
-                    attributes:['post_id'],
-                    where:{  
-                        category_id:[1,2,3,4], 
-                    }
-                });
-                break;
-            default:
-                break;
-        }
-        //console.log(postId);
-        let prueba =
-            await post.findAll({
-                include:[{
-                    model:category,
-                }]
-            });
-        //console.log(prueba);
-        return category_id;
+        let dataPosts = await post.findAll({
+            include:[{
+                model:category,
+                where:{
+                    id:idCategory.category_id,
+                },
+                order:[
+                    ['date_', 'DESC']
+                ],
+                through:{
+                    attributes:[]
+                }
+            }]
+        })
+         return {
+             status:200,
+             dataPosts
+         }
     }catch(error){
         return {
             status:204
@@ -72,34 +41,31 @@ async function getPost(req){
 }
 async function getCategory(req){
     try{
-        if(!req.body.category){
+        if(!req.body.category || req.body.category > 4){
             throw new Error;
         }
-        let postData =[]; 
-        let categoryId = req.body.category;
-        let postId = await postCategories.findAll({
-            attributes:['post_id'],
-            where:{  
-                category_id:categoryId, 
-            }
-        });
-
-        let data = await postId.map( async id =>{
-            await post.findAll({
+        let dataPosts = await post.findAll({
+            include:[{
+                model:category,
+                require:true,
                 where:{
-                    id:1
+                    id:req.body.category
+                },
+                order:[
+                    ['date_', 'DESC']
+                ],
+                through:{
+                    attributes:[]
                 }
+            }]
         })
-        });
-        console.log(data);
         return {
             status:200,
-            data: 'workind'
+            dataPosts
         }
     }catch(error){
-        console.error(error);
         return{
-            status:204
+            status:204,
         }
     }
 }
@@ -115,10 +81,12 @@ async function getBookmarks(req){
             },
             include:[{
                 model:post,
-                attributes:['title','source','date_']
+                attributes:['id','title','source','date_'],
+                through:{
+                    attributes:[]
+                }
             }]
         });
-        bookmarks = bookmarks.toJSON();
         return{
             status:200,
             bookmarks
