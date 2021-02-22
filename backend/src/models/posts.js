@@ -1,6 +1,5 @@
 const {DataTypes} = require('sequelize'); 
 const sequelize = require('../store/database');
-
 const {category} = require('./categories');
 const {postCategories} = require('./postCategories');
 const {celebrity} = require('./celebrities');
@@ -30,8 +29,7 @@ let post = sequelize.define('posts', {
 },  {
         freezeTableName: true, timestamps:false
 });
-
-let postCategoriesAssociation = function (){
+let postCategoryAssociation = function(){
     post.belongsToMany(category,{
         foreignKey:'post_id',
         through:{
@@ -43,13 +41,13 @@ let postCategoriesAssociation = function (){
     category.belongsToMany(post,{
         foreignKey:'category_id',
         through:{
-            model:postCategories,
+            model:postCategories
         },
         timestamps:false,
         uniqueKey:false
     });
 };
-postCategoriesAssociation();
+postCategoryAssociation();
 let postCelebritiesAssociation = function(){
     post.belongsToMany(celebrity,{
         foreignKey:'post_id',

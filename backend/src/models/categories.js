@@ -1,6 +1,6 @@
 const {DataTypes}= require('sequelize'); 
 const sequelize = require('../store/database');
-let category = sequelize.define('categories', { 
+const category = sequelize.define('categories', { 
     id: {
         type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true, allowNull:false
     },
