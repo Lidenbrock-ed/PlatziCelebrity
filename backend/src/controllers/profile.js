@@ -1,6 +1,6 @@
-const { post } = require('../models/posts');
+const {post} = require('../models/posts');
 const {user} = require('../models/users');
-const { userCategories } = require('../models/usersCategories');
+const {userCategories} = require('../models/usersCategories');
 async function getUser(req){
     try{
         if(!req.body.id){
@@ -18,7 +18,10 @@ async function getUser(req){
             },
             {
                 model:post,
-                attributes:['title','source','date_']
+                attributes:['title','source','date_','image'],
+                through:{
+                    attributes:[]
+                }
             }]
         });
         dataUser = dataUser.toJSON();
