@@ -3,7 +3,7 @@ const sequelize = require('../store/database');
 const {userLevel} = require('./usersLevel');
 const {post} = require('./posts');
 const {userPost} = require('./userPost');
-const {celebrity} = require('./celebrities');
+const {celebrities} = require('./celebrities');
 const {userCelebrities} = require('./userCelebrities')
 const {userCategories} = require('./usersCategories');
 let user = sequelize.define('users', { 
@@ -52,7 +52,7 @@ let userPostAssociation = () => {
 }; 
 userPostAssociation();
 let userCelebritiesAssociation = () => {
-    user.belongsToMany(celebrity,{
+    user.belongsToMany(celebrities,{
         foreignKey:'user_id',
         through:{
             model:userCelebrities,
@@ -60,7 +60,7 @@ let userCelebritiesAssociation = () => {
         timestamps:false,
         uniqueKey:false
     });
-    celebrity.belongsToMany(user,{
+    celebrities.belongsToMany(user,{
         foreignKey:'celebrity_id',
         through:{
             model:userCelebrities
