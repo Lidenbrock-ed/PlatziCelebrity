@@ -7,7 +7,7 @@ let celebrities = sequelize.define('celebrities', {
         type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true, allowNull:false
     },
     name:{
-        type:DataTypes.CHAR, allowNull:false
+        type:DataTypes.CHAR, allowNull:false, unique:true
     }
 },  {
         freezeTableName: true,timestamps:false
