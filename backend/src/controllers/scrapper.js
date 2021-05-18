@@ -39,6 +39,34 @@ async function insertCelebrity(celebrity){
     }catch(error){
     }
 }
+async function insertNoticesInPosts(info){
+    try{
+        let existNotice = await post.findOne({
+            attributes:['title', 'id'],
+            where:{
+                title: info.title
+            }
+        })
+        console.log("existe o no existe ", existNotice);
+        if(!existNotice){
+            console.log("no existe parce voy a crearla");
+            let postsInserted = await post.create({
+                title: info.title,
+                content: info.content,
+                source: info.source,
+                views_: 1,
+                date_: info.date,
+                image: info.image,
+            });
+            return postsInserted.id;
+        }else{
+            console.log('si existe, mira el id', existNotice.id);
+            return existNotice.id;
+        }
+    }catch(error){
+        console.log(error.message);
+    }
+}
 async function insertNotices(url){
     try{
         if(!url){
@@ -49,6 +77,8 @@ async function insertNotices(url){
             if(!info.title || !info.content|| !info.celebrity || !info.date){
             }else{
                 let idCelebrity = await insertCelebrity(info.celebrity);
+                let idPost = await insertNoticesInPosts(info);
+                console.log(idPost)
             }
         })
         return {
@@ -56,6 +86,7 @@ async function insertNotices(url){
             message:'Inserted successfully the notice',
         }
     }catch(error){
+        console.log(error);
         return{
             status:204
         }
