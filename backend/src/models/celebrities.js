@@ -2,6 +2,7 @@ const {DataTypes}= require('sequelize');
 const sequelize = require('../store/database');
 const {category} = require('./categories');
 const {celebrityCategories} = require('./celebrityCategories');
+const {associationsBelongsToMany} = require('./associations');
 let celebrities = sequelize.define('celebrities', { 
     id: {
         type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true, allowNull:false
@@ -12,25 +13,13 @@ let celebrities = sequelize.define('celebrities', {
 },  {
         freezeTableName: true,timestamps:false
 });
-let celebrityCategoriesAssociation = function (){
-    celebrities.belongsToMany(category,{
-        foreignKey:"celebrity_id",
-        through:{
-            model:celebrityCategories
-        },
-        timestamps:false,
-        uniqueKey:false
-    });
-    category.belongsToMany(celebrities,{
-        foreignKey:'category_id',
-        through:{
-            model:celebrityCategories
-        },
-        timestamps:false,
-        uniqueKey:false
-    });
-};
-celebrityCategoriesAssociation();
+associationsBelongsToMany({
+    firstTable:celebrities,
+    secondTable:category,
+    nameFKFirstTable:'celebrity_id',
+    nameFKSecondTable:'category_id',
+    transitiveTable: celebrityCategories
+});
 module.exports={
     celebrities
 };

@@ -4,6 +4,7 @@ const {category} = require('./categories');
 const {postCategories} = require('./postCategories');
 const {celebrities} = require('./celebrities');
 const {postCelebrities} = require('./postCelebrities');
+const{associationsBelongsToMany} = require('./associations');
 let post = sequelize.define('posts', {
     id: {
         type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true, allowNull:false
@@ -29,44 +30,20 @@ let post = sequelize.define('posts', {
 },  {
         freezeTableName: true, timestamps:false
 });
-let postCategoryAssociation = function(){
-    post.belongsToMany(category,{
-        foreignKey:'post_id',
-        through:{
-            model:postCategories
-        },
-        timestamps:false,
-        uniqueKey:false
-    });
-    category.belongsToMany(post,{
-        foreignKey:'category_id',
-        through:{
-            model:postCategories
-        },
-        timestamps:false,
-        uniqueKey:false
-    });
-};
-postCategoryAssociation();
-let postCelebritiesAssociation = function(){
-    post.belongsToMany(celebrities,{
-        foreignKey:'post_id',
-        through:{
-            model:postCelebrities
-        },
-        timestamps:false,
-        uniqueKey:false
-    });
-    celebrities.belongsToMany(post,{
-        foreignKey:'celebrity_id',
-        through:{
-            model:postCelebrities
-        },
-        timestamps:false,
-        uniqueKey:false
-    });
-};
-postCelebritiesAssociation();
+associationsBelongsToMany({
+    firstTable:post,
+    secondTable:category,
+    nameFKFirstTable:'post_id',
+    nameFKSecondTable:'category_id',
+    transitiveTable: postCategories
+});
+associationsBelongsToMany({
+    firstTable:post,
+    secondTable:celebrities,
+    nameFKFirstTable:'post_id',
+    nameFKSecondTable:'celebrity_id',
+    transitiveTable: postCelebrities
+});
 module.exports={
     post
 };
