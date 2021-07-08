@@ -4,7 +4,7 @@ const {user}= require('../models/users');
 const {userCategories} = require('../models/usersCategories');
 const validatorEmail= require('../auth/authEmail');
 const { userPost } = require('../models/userPost');
-const {SECRET} = process.env;
+const config = require('../config/config');
 async function registerUser(req){
     try{
         let body = req.body;
@@ -63,11 +63,11 @@ async function registerUser(req){
     }
 }
 function generateToken(idUser){
-    return jwt.sign({id:idUser, active:true}, SECRET);
+    return jwt.sign({id:idUser, active:true}, config.SECRET);
 }
 async function activateAccount(token){
     try{
-        let verify = jwt.verify(token, SECRET);
+        let verify = jwt.verify(token, config.SECRET);
         user.update({active:'true'},{
             where:{
                 id:verify.id

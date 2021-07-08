@@ -1,19 +1,19 @@
 function validatorEmail(req){
     const nodemailer = require('nodemailer');
-    const {EMAIL, PASSWORD_EMAIL} = process.env;
+    const config = require('../config/config');
     let transporter = nodemailer.createTransport({
         service:'gmail',
         secure:false,
         auth:{
-            user:EMAIL,
-            pass:PASSWORD_EMAIL
+            user:config.EMAIL,
+            pass:config.PASSWORD_EMAIL
         },
         tls: {
             rejectUnauthorized: false
         }
     });
     let mailOptions = {
-        from: EMAIL,
+        from: config.EMAIL,
         to: req.email,
         subject:'Confirmación de registro en People News',
         html: ` <h1>Confirma tu correo electrónico.</h1>
