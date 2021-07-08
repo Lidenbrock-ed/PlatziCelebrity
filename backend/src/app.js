@@ -15,7 +15,6 @@ const scrapperRoute = require('./routes/scrapper');
 app.use(function(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    //res.header('content-type: application/json; charset=utf-8');
     next();
 });
 app.use(express.urlencoded({ extended: false }));

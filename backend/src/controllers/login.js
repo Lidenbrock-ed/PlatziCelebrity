@@ -1,7 +1,5 @@
-//const jwt = require('jsonwebtoken');
 const {user} = require('../models/users');
 const bcrypt = require('bcrypt');
-let {SECRET} = process.env;
 async function loginUser (req){
     try{
     let data = req.body;

@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const {user}= require('../models/users');
 const {userCategories} = require('../models/usersCategories');
 const validatorEmail= require('../auth/authEmail');
-const { userPost } = require('../models/userPost');
 const config = require('../config/config');
 async function registerUser(req){
     try{
@@ -52,7 +51,6 @@ async function registerUser(req){
                     status:201,
                     message:"Registered user, please confirm you email."
                 };
-                break;
             default: throw new Error;
         }
     }catch(error){
